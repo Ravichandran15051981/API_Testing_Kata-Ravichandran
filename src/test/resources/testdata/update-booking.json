@@ -1,0 +1,12 @@
+{
+  "roomid": 1,
+  "firstname": "Ravichandran",
+  "lastname": "Thiyagarajan",
+  "depositpaid": false,
+  "bookingdates": {
+    "checkin": "2026-08-01",
+    "checkout": "2026-08-05"
+  },
+  "email": "ravichandran.thiyagarajan@testmail.com",
+  "phone": "987650123423"
+}
