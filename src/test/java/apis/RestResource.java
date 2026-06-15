@@ -30,6 +30,16 @@ public class RestResource {
                 response();
     }
 
+    public static Response getForNegativeValidation(String path) {
+        return given(getRequestSpec())
+                .header("Cookie", "token=" + getToken())
+                .when()
+                .get(path)
+                .then()
+                .extract()
+                .response();
+    }
+
     public static Response post(String path, Object bookingRequest) {
         return given(getRequestSpec())
                 .header("Cookie", "token=" + getToken())
@@ -42,6 +52,18 @@ public class RestResource {
                 .response();
     }
 
+    public static Response postForNegativeValidation(String path, Object bookingRequest) {
+        return given(getRequestSpec())
+                .header("Cookie", "token=" + getToken())
+                .body(bookingRequest)
+                .when()
+                .post(path)
+                .then()
+                .log().all()
+                .extract()
+                .response();
+    }
+
     public static Response put(String path, Object updatedBookingRequest) {
         return given(getRequestSpec())
                 .header("Cookie", "token=" + getToken())
@@ -50,6 +72,18 @@ public class RestResource {
                 .put(path)
                 .then()
                 .spec(getResponseSpec())
+                .extract()
+                .response();
+    }
+
+    public static Response putForNegativeValidation(String path, Object updatedBookingRequest) {
+        return given(getRequestSpec())
+                .header("Cookie", "token=" + getToken())
+                .body(updatedBookingRequest)
+                .when()
+                .put(path)
+                .then()
+                .log().all()
                 .extract()
                 .response();
     }
@@ -75,14 +109,5 @@ public class RestResource {
                 .response();
     }
 
-    public static Response getForNegativeValidation(String path) {
-        return given(getRequestSpec())
-                .header("Cookie", "token=" + getToken())
-                .when()
-                .get(path)
-                .then()
-                .extract()
-                .response();
-    }
 
 }
