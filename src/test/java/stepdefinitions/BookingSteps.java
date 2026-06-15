@@ -14,6 +14,8 @@ import utils.TestContext;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BookingSteps {
@@ -82,6 +84,68 @@ public class BookingSteps {
         context.setBookingRequest(bookingRequest);
     }
 
+    @Given("I use invalid booking id {string}")
+    public void iUseInvalidBookingId(String bookingId) {
+        Assert.assertNotNull(bookingId, "Invalid booking id is null");
+        context.setInvalidBookingId(bookingId);
+    }
+
+    @Given("I have invalid create booking payload with roomid {string}, bookingid {string}, firstname {string}, lastname {string}, depositpaid {string}, email {string}, phone {string}, checkin {string}, checkout {string}, unexpectedField {string}")
+    public void iHaveInvalidCreateBookingPayloadWithDetails(
+            String roomid,
+            String bookingid,
+            String firstname,
+            String lastname,
+            String depositpaid,
+            String email,
+            String phone,
+            String checkin,
+            String checkout,
+            String unexpectedField
+    ) {
+        Map<String, Object> payload = buildInvalidBookingPayload(
+                roomid,
+                bookingid,
+                firstname,
+                lastname,
+                depositpaid,
+                email,
+                phone,
+                checkin,
+                checkout,
+                unexpectedField
+        );
+
+        context.setInvalidCreateBookingPayload(payload);
+    }
+
+    @Given("I have invalid update booking payload with roomid {string}, firstname {string}, lastname {string}, depositpaid {string}, email {string}, phone {string}, checkin {string}, checkout {string}")
+    public void iHaveInvalidUpdateBookingPayloadWithDetails(
+            String roomid,
+            String firstname,
+            String lastname,
+            String depositpaid,
+            String email,
+            String phone,
+            String checkin,
+            String checkout
+    ) {
+        Map<String, Object> payload = buildInvalidBookingPayload(
+                roomid,
+                "OMIT",
+                firstname,
+                lastname,
+                depositpaid,
+                email,
+                phone,
+                checkin,
+                checkout,
+                "OMIT"
+        );
+
+        context.setInvalidUpdateBookingPayload(payload);
+    }
+
     @When("I send a POST request to create booking")
     public void iSendAPostRequestToCreateBooking() {
         Assert.assertNotNull(context.getBookingRequest(), "Booking request payload is null");
@@ -104,6 +168,17 @@ public class BookingSteps {
         context.setResponse(response);
     }
 
+    @When("I send a GET request using invalid booking id")
+    public void iSendAGetRequestUsingInvalidBookingId() {
+        Assert.assertNotNull(context.getInvalidBookingId(), "Invalid booking id is null");
+
+        Response response = RestResource.getForNegativeValidation(
+                "/booking/" + context.getInvalidBookingId()
+        );
+
+        context.setResponse(response);
+    }
+
     @When("I send a PUT request to update the booking")
     public void iSendAPutRequestToUpdateTheBooking() throws IOException {
         Integer bookingId = getBookingId();
@@ -122,6 +197,36 @@ public class BookingSteps {
         Response response = RestResource.put(
                 "/booking/" + bookingId,
                 context.getUpdatedBookingRequest()
+        );
+
+        context.setResponse(response);
+    }
+
+    @When("I send a PUT request using invalid booking id")
+    public void iSendAPutRequestUsingInvalidBookingId() {
+        Assert.assertNotNull(context.getInvalidBookingId(), "Invalid booking id is null");
+        Assert.assertNotNull(context.getUpdatedBookingRequest(), "Updated booking payload is null");
+
+        Response response = RestResource.putForNegativeValidation(
+                "/booking/" + context.getInvalidBookingId(),
+                context.getUpdatedBookingRequest()
+        );
+
+        context.setResponse(response);
+    }
+
+    @When("I send a PUT request to update booking with invalid payload")
+    public void iSendAPutRequestToUpdateBookingWithInvalidPayload() {
+        Integer bookingId = getBookingId();
+
+        Assert.assertNotNull(
+                context.getInvalidUpdateBookingPayload(),
+                "Invalid update booking payload is null"
+        );
+
+        Response response = RestResource.putForNegativeValidation(
+                "/booking/" + bookingId,
+                context.getInvalidUpdateBookingPayload()
         );
 
         context.setResponse(response);
@@ -153,6 +258,21 @@ public class BookingSteps {
         Integer bookingId = getBookingId();
 
         Response response = RestResource.delete("/booking/" + bookingId);
+        context.setResponse(response);
+    }
+
+    @When("I send a POST request to create booking with invalid payload")
+    public void iSendAPostRequestToCreateBookingWithInvalidPayload() {
+        Assert.assertNotNull(
+                context.getInvalidCreateBookingPayload(),
+                "Invalid create booking payload is null"
+        );
+
+        Response response = RestResource.postForNegativeValidation(
+                "/booking",
+                context.getInvalidCreateBookingPayload()
+        );
+
         context.setResponse(response);
     }
 
@@ -204,6 +324,24 @@ public class BookingSteps {
         Assert.assertTrue(
                 statusCode == 404 || statusCode == 405,
                 "Booking is still available. Status code: " + statusCode + ", Response: " + getResponse.asString()
+        );
+    }
+
+    @Then("the response body should contain {string}")
+    public void theResponseBodyShouldContain(String expectedMessage) {
+        Assert.assertNotNull(context.getResponse(), "Response is null");
+
+        String responseBody = context.getResponse().asString();
+
+        Assert.assertNotNull(responseBody, "Response body is null");
+        Assert.assertNotNull(expectedMessage, "Expected message is null");
+
+        Assert.assertTrue(
+                responseBody.toLowerCase().contains(expectedMessage.toLowerCase()),
+                "Response body does not contain expected message. Expected message: "
+                        + expectedMessage
+                        + ". Actual response body: "
+                        + responseBody
         );
     }
 
@@ -305,5 +443,121 @@ public class BookingSteps {
 
         bookingRequest.getBookingdates().setCheckin(checkinDate.toString());
         bookingRequest.getBookingdates().setCheckout(checkoutDate.toString());
+    }
+
+    private Map<String, Object> buildInvalidBookingPayload(
+            String roomid,
+            String bookingid,
+            String firstname,
+            String lastname,
+            String depositpaid,
+            String email,
+            String phone,
+            String checkin,
+            String checkout,
+            String unexpectedField
+    ) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+
+        addFieldIfNotOmitted(payload, "bookingid", convertNumberOrSpecialValue(bookingid));
+        addFieldIfNotOmitted(payload, "roomid", convertNumberOrSpecialValue(roomid));
+        addFieldIfNotOmitted(payload, "firstname", convertStringOrSpecialValue(firstname));
+        addFieldIfNotOmitted(payload, "lastname", convertStringOrSpecialValue(lastname));
+        addFieldIfNotOmitted(payload, "depositpaid", convertDepositPaidValue(depositpaid));
+        addFieldIfNotOmitted(payload, "email", convertStringOrSpecialValue(email));
+        addFieldIfNotOmitted(payload, "phone", convertStringOrSpecialValue(phone));
+
+        Map<String, Object> bookingDates = new LinkedHashMap<>();
+
+        addFieldIfNotOmitted(bookingDates, "checkin", convertStringOrSpecialValue(checkin));
+        addFieldIfNotOmitted(bookingDates, "checkout", convertStringOrSpecialValue(checkout));
+
+        payload.put("bookingdates", bookingDates);
+
+        if (!isOmitted(unexpectedField)) {
+            payload.put("unexpectedField", unexpectedField);
+        }
+
+        return payload;
+    }
+
+    private void addFieldIfNotOmitted(Map<String, Object> payload, String fieldName, Object fieldValue) {
+        if (fieldValue instanceof String && isOmitted((String) fieldValue)) {
+            return;
+        }
+
+        payload.put(fieldName, fieldValue);
+    }
+
+    private Object convertStringOrSpecialValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        if ("NULL".equalsIgnoreCase(value.trim())) {
+            return null;
+        }
+
+        if ("OMIT".equalsIgnoreCase(value.trim())) {
+            return "OMIT";
+        }
+
+        return value;
+    }
+
+    private Object convertNumberOrSpecialValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmedValue = value.trim();
+
+        if ("NULL".equalsIgnoreCase(trimmedValue)) {
+            return null;
+        }
+
+        if ("OMIT".equalsIgnoreCase(trimmedValue)) {
+            return "OMIT";
+        }
+
+        if (trimmedValue.matches("-?\\d+")) {
+            return Integer.parseInt(trimmedValue);
+        }
+
+        return value;
+    }
+
+    private Object convertDepositPaidValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmedValue = value.trim();
+
+        if ("NULL".equalsIgnoreCase(trimmedValue)) {
+            return null;
+        }
+
+        if ("OMIT".equalsIgnoreCase(trimmedValue)) {
+            return "OMIT";
+        }
+
+        if ("true".equalsIgnoreCase(trimmedValue)) {
+            return true;
+        }
+
+        if ("false".equalsIgnoreCase(trimmedValue)) {
+            return false;
+        }
+
+        if (trimmedValue.matches("-?\\d+")) {
+            return Integer.parseInt(trimmedValue);
+        }
+
+        return value;
+    }
+
+    private boolean isOmitted(String value) {
+        return value != null && "OMIT".equalsIgnoreCase(value.trim());
     }
 }
