@@ -75,4 +75,14 @@ public class RestResource {
                 .response();
     }
 
+    public static Response getForNegativeValidation(String path) {
+        return given(getRequestSpec())
+                .header("Cookie", "token=" + getToken())
+                .when()
+                .get(path)
+                .then()
+                .extract()
+                .response();
+    }
+
 }
