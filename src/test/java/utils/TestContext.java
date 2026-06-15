@@ -5,6 +5,8 @@ import pojo.AuthRequest;
 import pojo.BookingRequest;
 import pojo.PartialUpdateBookingRequest;
 
+import java.util.Map;
+
 public class TestContext {
 
     private static final ThreadLocal<TestContext> CONTEXT = ThreadLocal.withInitial(TestContext::new);
@@ -12,10 +14,13 @@ public class TestContext {
     private Response response;
     private String token;
     private Integer bookingId;
+    private String invalidBookingId;
     private AuthRequest authRequest;
     private BookingRequest bookingRequest;
     private BookingRequest updatedBookingRequest;
     private PartialUpdateBookingRequest partialUpdateBookingRequest;
+    private Map<String, Object> invalidCreateBookingPayload;
+    private Map<String, Object> invalidUpdateBookingPayload;
 
     private TestContext() {
     }
@@ -52,6 +57,14 @@ public class TestContext {
         this.bookingId = bookingId;
     }
 
+    public String getInvalidBookingId() {
+        return invalidBookingId;
+    }
+
+    public void setInvalidBookingId(String invalidBookingId) {
+        this.invalidBookingId = invalidBookingId;
+    }
+
     public AuthRequest getAuthRequest() {
         return authRequest;
     }
@@ -82,5 +95,21 @@ public class TestContext {
 
     public void setPartialUpdateBookingRequest(PartialUpdateBookingRequest partialUpdateBookingRequest) {
         this.partialUpdateBookingRequest = partialUpdateBookingRequest;
+    }
+
+    public Map<String, Object> getInvalidCreateBookingPayload() {
+        return invalidCreateBookingPayload;
+    }
+
+    public void setInvalidCreateBookingPayload(Map<String, Object> invalidCreateBookingPayload) {
+        this.invalidCreateBookingPayload = invalidCreateBookingPayload;
+    }
+
+    public Map<String, Object> getInvalidUpdateBookingPayload() {
+        return invalidUpdateBookingPayload;
+    }
+
+    public void setInvalidUpdateBookingPayload(Map<String, Object> invalidUpdateBookingPayload) {
+        this.invalidUpdateBookingPayload = invalidUpdateBookingPayload;
     }
 }
