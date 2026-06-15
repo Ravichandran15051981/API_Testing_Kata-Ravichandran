@@ -13,7 +13,7 @@ public class TokenManager {
 
     public synchronized static String getToken() {
         try{
-            if(token == null || Instant.now().isAfter(expiry_time)){
+            if(isTokenExpiredOrNotAvailable()){
                 System.out.println("Renewing token ...");
                 Response response = renewToken();
                 token = response.path("token");
@@ -27,6 +27,13 @@ public class TokenManager {
             throw new RuntimeException("ABORT!!! Failed to get token");
         }
         return token;
+    }
+
+    private static boolean isTokenExpiredOrNotAvailable() {
+        return token == null
+                || token.trim().isEmpty()
+                || expiry_time == null
+                || Instant.now().isAfter(expiry_time);
     }
 
     private static Response renewToken(){
