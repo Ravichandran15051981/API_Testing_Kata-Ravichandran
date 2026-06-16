@@ -6,27 +6,27 @@ This project is an API automation framework developed for the **API Testing KATA
 The framework automates API validations for the Booking application hosted at: https://automationintesting.online
 
 The framework currently covers:
-✅ Authentication API
-✅ Booking API positive scenarios
-✅ Booking API negative validation scenarios
-✅ Dynamic booking id handling
-✅ Token generation and reuse
-✅ JSON payload-based request creation
-✅ POJO-based request serialization and response deserialization
-✅ Cucumber BDD reporting
+- ✅ Authentication API
+- ✅ Booking API positive scenarios
+- ✅ Booking API negative validation scenarios
+- ✅ Dynamic booking id handling
+- ✅ Token generation and reuse
+- ✅ JSON payload-based request creation
+- ✅ POJO-based request serialization and response deserialization
+- ✅ Cucumber BDD reporting
 
 ## 🧭 Flow Explanation
 
-🥒 Feature files describe test scenarios in readable Gherkin format.
-🧩 Step definitions contain Java implementation for each Gherkin step.
-📦 POJO classes represent API request and response models.
-📄 JSON files are used as request payload sources.
-🔄 JacksonUtils converts JSON files into Java POJO objects.
-🌐 RestResource provides reusable methods for API calls.
-⚙️ SpecBuilder maintains common Rest Assured specifications.
-🔐 TokenManager handles token generation and reuse.
-🧠 TestContext stores runtime scenario data such as response, token, booking id, and payloads.
-🪝 Hooks perform scenario-level logging and cleanup.
+- 🥒 **Feature files** describe test scenarios in readable Gherkin format.
+- 🧩 **Step definitions** contain Java implementation for each Gherkin step.
+- 📦 **POJO classes** represent API request and response models.
+- 📄 **JSON files** are used as request payload sources.
+- 🔄 **JacksonUtils** converts JSON files into Java POJO objects.
+- 🌐 **RestResource** provides reusable methods for API calls.
+- ⚙️ **SpecBuilder** maintains common Rest Assured specifications.
+- 🔐 **TokenManager** handles token generation and reuse.
+- 🧠 **TestContext** stores runtime scenario data such as response, token, booking id, and payloads.
+- 🪝 **Hooks** perform scenario-level logging and cleanup.
 
 
 ## 🧰 Technologies / Tools Used
@@ -47,6 +47,8 @@ The framework currently covers:
 
 ## 📁 Folder Structure Overview
 
+
+```text
 API_Testing_Kata
 │
 ├── pom.xml
@@ -97,61 +99,63 @@ API_Testing_Kata
 │               ├── create-booking.json
 │               ├── update-booking.json
 │               └── partial-update-booking.json
+```
+
 
 ## ✅ Framework Implements Below Best Practices
 ### 🧱 Framework Design
 
-✅ Modular and scalable folder structure
-✅ Separation of concerns across apis, pojo, utils, hooks, runners, and stepdefinitions
-✅ Reusable API resource layer through RestResource
-✅ Centralized request and response specification using SpecBuilder
-✅ Configuration-driven framework using config.properties
+- ✅ Modular and scalable folder structure
+- ✅ Separation of concerns across apis, pojo, utils, hooks, runners, and stepdefinitions
+- ✅ Reusable API resource layer through RestResource
+- ✅ Centralized request and response specification using SpecBuilder
+- ✅ Configuration-driven framework using config.properties
 
 ### 🥒 Cucumber / BDD Practices
 
-✅ Feature files written in Gherkin format
-✅ Scenarios grouped by API capability
-✅ Tags used for selective execution
-✅ TestNG-based Cucumber runner
-✅ Scenario hooks for logging and context cleanup
+- ✅ Feature files written in Gherkin format
+- ✅ Scenarios grouped by API capability
+- ✅ Tags used for selective execution
+- ✅ TestNG-based Cucumber runner
+- ✅ Scenario hooks for logging and context cleanup
 
 ### 🔐 Authentication Handling
 
-✅ Auth token generated through login API
-✅ Token reused for authenticated APIs
-✅ Token renewal handled through TokenManager
-✅ Auth credentials maintained through configuration and JSON payload
+- ✅ Auth token generated through login API
+- ✅ Token reused for authenticated APIs
+- ✅ Token renewal handled through TokenManager
+- ✅ Auth credentials maintained through configuration and JSON payload
 
 ### 📦 Payload and Data Management
 
-✅ JSON-based request payloads
-✅ Jackson-based JSON deserialization
-✅ POJO-based request serialization
-✅ Strongly typed request and response models
-✅ Dynamic booking dates to avoid duplicate booking conflicts
+- ✅ JSON-based request payloads
+- ✅ Jackson-based JSON deserialization
+- ✅ POJO-based request serialization
+- ✅ Strongly typed request and response models
+- ✅ Dynamic booking dates to avoid duplicate booking conflicts
 
 ### 🔁 Runtime Data Handling
 
-✅ Dynamic booking id extraction from create booking response
-✅ Booking id reused across GET, PUT, PATCH, and DELETE scenarios
-✅ TestContext used for sharing scenario-level data
-✅ ThreadLocal-based context design for safer execution
+- ✅ Dynamic booking id extraction from create booking response
+- ✅ Booking id reused across GET, PUT, PATCH, and DELETE scenarios
+- ✅ TestContext used for sharing scenario-level data
+- ✅ ThreadLocal-based context design for safer execution
 
 ### 🧪 Validation Strategy
 
-✅ Status code validation
-✅ Response body validation
-✅ Booking details validation
-✅ Token availability validation
-✅ Positive and negative API validations
-✅ API behavior-aligned assertions based on actual server response
+- ✅ Status code validation
+- ✅ Response body validation
+- ✅ Booking details validation
+- ✅ Token availability validation
+- ✅ Positive and negative API validations
+- ✅ API behavior-aligned assertions based on actual server response
 
 ### 📊 Reporting
 
-✅ Cucumber HTML report
-✅ Cucumber JSON report
-✅ Allure results support
-✅ Console logs for request and response debugging
+- ✅ Cucumber HTML report
+- ✅ Cucumber JSON report
+- ✅ Allure results support
+- ✅ Console logs for request and response debugging
 
 ## ▶️ Running Tests
 
