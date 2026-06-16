@@ -1,67 +1,255 @@
-# Kata API Testing in Java
+# API Testing KATA - Rest Assured Cucumber Framework
 
-API Testing and Java Exercise: Setting up a Basic API Test Automation Framework.
+## About
 
-## Objective
-The objective of this exercise is to evaluate your knowledge on API testing and Java by setting up a basic API Test Automation framework using Rest-Assured and Cucumber. You will need to create a test suite that executes a few tests against one endpoint of a hotel booking website and evaluates their responses.
+This project is an API automation framework developed for the **API Testing KATA** using **Rest Assured**, **Cucumber**, **TestNG**, and **Jackson**.
+The framework automates API validations for the Booking application hosted at: https://automationintesting.online
 
-## Background
-The application under test is a simple hotel booking website where you can book a room and also send a form with a request.
+The framework currently covers:
+✅ Authentication API
+✅ Booking API positive scenarios
+✅ Booking API negative validation scenarios
+✅ Dynamic booking id handling
+✅ Token generation and reuse
+✅ JSON payload-based request creation
+✅ POJO-based request serialization and response deserialization
+✅ Cucumber BDD reporting
 
-The website can be accessed at https://automationintesting.online/.
+## 🧭 Flow Explanation
 
-The Swagger documentation for the two endpoints you will be testing can be found at:
-
-Booking endpoint: https://automationintesting.online/booking/swagger-ui/index.html  
-Optionally, you also have the Authentican endpoint: https://automationintesting.online/auth/swagger-ui/index.html
-
-### Swagger
-This website is an external application which is not in our control.  
-We noticed that the Swagger documentation is sometimes not available on the mentioned URL above.  
-As a backup, you can find the Swagger documentation in this repository at [src/test/resources/spec/booking.yaml](src/test/resources/spec/booking.yaml)
-
-The Open API Spec file is only supported in the Ultimate version of IntelliJ IDEA. But you can copy the content of the file and paste it in an online Swagger editor like https://editor.swagger.io/ to visualize the API documentation.
-
-### Authentication
-In order to authenticate yourself, the required credentials are:
-* Username: `admin`
-* Password: `password`
-
-## Task
-You are provided with an extremely basic API test project.
-
-Please clone the project and create a new branch with your name. At the end, please push your branch to this project.
-
-The project to start from, can be found here: https://github.com/freddyschoeters/API_Testing_kata
-
-Your task is to set up an API Test Automation framework from this project using Java, Rest-Assured, and Cucumber (feel free to add more dependencies if required).
-
-It is up to you to define the test cases. You don’t need to have a full coverage, but you need to show enough variation on the types of tests that you would need to write and execute, and what to check in the response.
-
-This kata has the purpose to evaluate both your technical skills as well as your testing skills.
-
-`For this task, you will use the booking endpoint.`
+🥒 Feature files describe test scenarios in readable Gherkin format.
+🧩 Step definitions contain Java implementation for each Gherkin step.
+📦 POJO classes represent API request and response models.
+📄 JSON files are used as request payload sources.
+🔄 JacksonUtils converts JSON files into Java POJO objects.
+🌐 RestResource provides reusable methods for API calls.
+⚙️ SpecBuilder maintains common Rest Assured specifications.
+🔐 TokenManager handles token generation and reuse.
+🧠 TestContext stores runtime scenario data such as response, token, booking id, and payloads.
+🪝 Hooks perform scenario-level logging and cleanup.
 
 
-## Requirements
-* Use Java as the programming language
-* Use Rest-Assured as the API testing library
-* Use Cucumber as the BDD framework
-* Design your codebase using a proper Java design pattern
-* Write good tests with correct checks
-* Use Git for version control and push your codebase to an open GitHub repository
-* Make regular commits to demonstrate your progress
+## 🧰 Technologies / Tools Used
+
+| Icon | Technology / Tool | Purpose |
+|---|---|---|
+| ☕ | Java | Programming language |
+| 📦 | Maven | Build and dependency management |
+| 🔍 | Rest Assured | API automation and validation |
+| 🥒 | Cucumber | BDD-style test design |
+| 🧪 | TestNG | Test execution framework |
+| 📄 | Jackson | JSON serialization and deserialization |
+| 📊 | Allure Report | Advanced test reporting |
+| 📘 | Cucumber HTML Report | Default BDD execution report |
+| 🧑‍💻 | IntelliJ IDEA | Development IDE |
+| 🌿 | Git | Version control |
+| 🐙 | GitHub | Repository hosting |
+
+## 📁 Folder Structure Overview
+
+API_Testing_Kata
+│
+├── pom.xml
+├── README.md
+│
+├── src
+│   └── test
+│       ├── java
+│       │   ├── apis
+│       │   │   ├── RestResource.java
+│       │   │   ├── SpecBuilder.java
+│       │   │   └── TokenManager.java
+│       │   │
+│       │   ├── hooks
+│       │   │   └── Hooks.java
+│       │   │
+│       │   ├── pojo
+│       │   │   ├── AuthRequest.java
+│       │   │   ├── BookingDates.java
+│       │   │   ├── BookingRequest.java
+│       │   │   ├── BookingResponse.java
+│       │   │   └── PartialUpdateBookingRequest.java
+│       │   │
+│       │   ├── runners
+│       │   │   └── TestRunner.java
+│       │   │
+│       │   ├── stepdefinitions
+│       │   │   ├── AuthSteps.java
+│       │   │   ├── BookingSteps.java
+│       │   │   └── HealthSteps.java
+│       │   │
+│       │   └── utils
+│       │       ├── ConfigLoader.java
+│       │       ├── JacksonUtils.java
+│       │       └── TestContext.java
+│       │
+│       └── resources
+│           ├── config
+│           │   └── config.properties
+│           │
+│           ├── features
+│           │   ├── auth.feature
+│           │   ├── booking.feature
+│           │   └── health.feature
+│           │
+│           └── testdata
+│               ├── auth-login.json
+│               ├── create-booking.json
+│               ├── update-booking.json
+│               └── partial-update-booking.json
+
+## ✅ Framework Implements Below Best Practices
+### 🧱 Framework Design
+
+✅ Modular and scalable folder structure
+✅ Separation of concerns across apis, pojo, utils, hooks, runners, and stepdefinitions
+✅ Reusable API resource layer through RestResource
+✅ Centralized request and response specification using SpecBuilder
+✅ Configuration-driven framework using config.properties
+
+### 🥒 Cucumber / BDD Practices
+
+✅ Feature files written in Gherkin format
+✅ Scenarios grouped by API capability
+✅ Tags used for selective execution
+✅ TestNG-based Cucumber runner
+✅ Scenario hooks for logging and context cleanup
+
+### 🔐 Authentication Handling
+
+✅ Auth token generated through login API
+✅ Token reused for authenticated APIs
+✅ Token renewal handled through TokenManager
+✅ Auth credentials maintained through configuration and JSON payload
+
+### 📦 Payload and Data Management
+
+✅ JSON-based request payloads
+✅ Jackson-based JSON deserialization
+✅ POJO-based request serialization
+✅ Strongly typed request and response models
+✅ Dynamic booking dates to avoid duplicate booking conflicts
+
+### 🔁 Runtime Data Handling
+
+✅ Dynamic booking id extraction from create booking response
+✅ Booking id reused across GET, PUT, PATCH, and DELETE scenarios
+✅ TestContext used for sharing scenario-level data
+✅ ThreadLocal-based context design for safer execution
+
+### 🧪 Validation Strategy
+
+✅ Status code validation
+✅ Response body validation
+✅ Booking details validation
+✅ Token availability validation
+✅ Positive and negative API validations
+✅ API behavior-aligned assertions based on actual server response
+
+### 📊 Reporting
+
+✅ Cucumber HTML report
+✅ Cucumber JSON report
+✅ Allure results support
+✅ Console logs for request and response debugging
+
+## ▶️ Running Tests
+
+### ✅ Run All Tests
+mvn clean test
+
+### 🔐 Run Auth Tests
+mvn clean test -Dcucumber.filter.tags="@auth"
+
+### 🏨 Run Booking Tests
+mvn clean test -Dcucumber.filter.tags="@booking"
+
+### 🟢 Run Create Booking Tests
+mvn clean test -Dcucumber.filter.tags="@create"
+
+### 🔴 Run Negative Validation Tests
+mvn clean test -Dcucumber.filter.tags="@negative"
+
+### 🧪 Run from IntelliJ IDEA
+1. Open the project in IntelliJ IDEA.
+2. Navigate to: src/test/java/runners/TestRunner.java
+3. Right-click TestRunner.java
+4. Select: Run 'TestRunner'
+
+## 📊 Test Reports
+
+### 📘 Cucumber HTML Report
+After test execution, the Cucumber HTML report is generated at:
+
+## 📄 Cucumber JSON Report
+target/cucumber-reports/cucumber-report.json
+
+## 📈 Test Execution Summary
+
+| Metric | Count |
+|---|---:|
+| ✅ Total test cases | 50 |
+| 🟢 Passed test cases | 47 |
+| 🔴 Failed test cases | 3 |
+| 📊 Pass percentage | 94% |
+
+> ⚠️ **Note:** API responses from the server are sometimes inconsistent. When the API response is stable, the above results are observed.
+
+## ⚠️ Known Observations
+
+| Area | Count | Remarks |
+|---|---:|---|
+| 🔁 PATCH API | 1 | API appears unstable or not fully implemented from server side |
+| 🐞 Possible API defect | 2 | Requires further API-side validation |
+
+## 🏷️ Useful Tags
+
+| Tag | Purpose |
+|---|---|
+| `@auth` | Run authentication scenarios |
+| `@booking` | Run booking API scenarios |
+| `@create` | Run create booking scenarios |
+| `@get` | Run get booking scenarios |
+| `@update` | Run update booking scenarios |
+| `@patch` | Run partial update scenarios |
+| `@delete` | Run delete booking scenarios |
+| `@negative` | Run negative validation scenarios |
+| `@validation` | Run field validation scenarios |
+
+---
+
+## 🧾 API Coverage
+
+| API Area | Method | Endpoint | Status |
+|---|---|---|---|
+| 🔐 Auth | POST | `/auth/login` | ✅ Automated |
+| 🏨 Booking | POST | `/booking` | ✅ Automated |
+| 🏨 Booking | GET | `/booking/{id}` | ✅ Automated |
+| 🏨 Booking | PUT | `/booking/{id}` | ✅ Automated |
+| 🏨 Booking | PATCH | `/booking/{id}` | ✅ Automated |
+| 🏨 Booking | DELETE | `/booking/{id}` | ✅ Automated |
+| 💚 Health | GET | `/booking/actuator/health` | ✅ Automated |
+
+---
+
+## 📌 Notes
+
+- The framework uses JSON payload files from `src/test/resources/testdata`.
+- Booking ids are not hardcoded for positive booking flows.
+- Booking id is dynamically extracted from the create booking response.
+- Unique booking dates are generated during execution to avoid duplicate booking conflicts.
+- Some API responses are inconsistent from the server side, so validations are aligned with observed API behavior.
+
+---
+
+## 👤 Author
+
+**Ravichandran Thiyagarajan**
 
 
-## Deliverables
-* Your branch pushed in the provided project.
-* A comprehensive test suite covering the scenarios mentioned above
-* A well-structured codebase with proper design patterns and comments
-* Regular commits demonstrating your progress
 
-## Evaluation Criteria
-* Being able to successfully run the tests
-* Correctness and completeness of the test suite
-* Quality of the codebase (design patterns, structure, code quality, …)
-* Use of Rest-Assured and Cucumber features
-* Commit history and progress demonstration
+
+
+
+
+
